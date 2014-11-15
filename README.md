@@ -17,5 +17,6 @@ Arduino Sketch Instalation
 10. Close window when installation is complete
 
 
-
+Driver Libraries
 =================================
+Thermal Sensor: http://datasheets.maximintegrated.com/en/ds/DS18B20.pdf
