@@ -1,2 +1,72 @@
 // ARDUINO DIGITAL THERMAL SENSOR SKETCH
 // =====================================
+#include <OneWire.h>
+
+OneWire ds(12);
+float temp;
+float Fah;
+
+void setup()  {
+  Serial.begin(9600);
+}
+
+void loop(void) {
+  byte i;
+  byte present = 0;
+  byte data[12];
+  byte addr[8];
+  
+  if(!ds.search(addr)){
+    //Serial.print("No more addresss. \n");
+    ds.reset_search();
+    return;
+  }
+  
+  if(OneWire::crc8( addr,7)!=addr[7]){
+     Serial.print("CRC is not valid!\n");
+     return;
+  }
+  
+  if(addr[0]==0x10){
+    //Serial.print("Device is a DS18S20 family device.\n");
+  }
+  else if(addr[0]==0x28){
+    //Serial.print("Device is a DS18B20 family device.\n");
+  }
+  else{
+    Serial.print("Device family is not recognized: 0x");
+    Serial.println(addr[0],HEX);
+    return;
+  }
+  
+  ds.reset();
+  ds.select(addr);
+  ds.write(0x44,1);
+  
+  delay(1000);
+  
+  present=ds.reset();
+  ds.select(addr);
+  ds.write(0xBE);
+  
+  /*Serial.print("P=");
+  Serial.print(present,HEX);
+  Serial.print(" ");*/
+  for(i=0;i<9;i++){
+    data[i] = ds.read();
+    //Serial.print(data[i],HEX);
+    //Serial.print(" ");
+  }
+  /*Serial.print(" CRC=");
+  Serial.print( OneWire::crc8( data,8), HEX);
+  Serial.println();*/
+  temp = ( (data[1] << 8) + data[0] ) * 0.0625;
+  Serial.print("temperature = ");
+  Serial.print(temp);
+  Serial.print(" degrees celcius");
+  Serial.println();
+  Fah = ((9 * temp) / 5) + 32;
+  Serial.print("Fahrenheit:");
+  Serial.print(Fah);
+  Serial.println();
+}
