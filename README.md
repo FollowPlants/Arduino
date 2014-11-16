@@ -3,7 +3,7 @@ Arduino
 
 Arduino Sketch and Instructions
 ===============================
-Arduino Sketch Instalation
+Arduino Sketch Installation
 -------------------------------
 1. First go to http://arduino.cc/en/Main/Software
 2. Find the installer that corresponds to your computer for the latest version of Arduino (Currently Ver. 1.0.6)
